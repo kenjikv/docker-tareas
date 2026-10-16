@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mis tareas</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0b0d10; color: #edf1f5; max-width: 560px; margin: 48px auto; padding: 0 16px; }
+    h1 { margin-bottom: 4px; }
+    .servidor { color: #77828f; font-family: ui-monospace, monospace; font-size: 14px; margin-bottom: 24px; }
+    form.nueva { display: flex; gap: 8px; margin-bottom: 24px; }
+    input[type=text] { flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid #2a313a; background: #151a20; color: inherit; font-size: 16px; }
+    button { padding: 10px 14px; border-radius: 8px; border: 0; background: #00a6a6; color: #0b0d10; font-weight: 700; cursor: pointer; }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1f262e; font-size: 18px; }
+    li form button { background: #1f262e; color: #edf1f5; width: 32px; padding: 6px 0; }
+    li.hecha span { text-decoration: line-through; color: #77828f; }
+  </style>
+</head>
+<body>
+  <h1>Mis tareas</h1>
+  <div class="servidor">servidor: {{ servidor }}</div>
+  <form class="nueva" method="post" action="/agregar">
+    <input type="text" name="texto" placeholder="Nueva tarea" autofocus>
+    <button>Agregar</button>
+  </form>
+  <ul>
+    {% for id, texto, hecha in tareas %}
+    <li class="{{ 'hecha' if hecha }}">
+      <form method="post" action="/hecha/{{ id }}"><button>{{ '✓' if hecha else '' }}</button></form>
+      <span>{{ texto }}</span>
+    </li>
+    {% else %}
+    <li>Todavía no hay tareas.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

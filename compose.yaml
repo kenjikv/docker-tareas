@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DATABASE_URL: postgresql://tareas:${POSTGRES_PASSWORD}@db:5432/tareas
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: tareas
+      POSTGRES_DB: tareas
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - datos:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tareas -d tareas"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  datos:
